@@ -1,0 +1,18 @@
+actor: AcceptanceTester
+modules:
+    enabled:
+        - \Helper\Acceptance
+        - Asserts
+        - WebDriver
+    step_decorators:
+        - \Codeception\Util\Locator
+        - \Codeception\Util\ActionSequence
+        - \Codeception\Steps\Retry
+    config:
+        WebDriver:
+            url: 'http://localhost/'
+            window_size: 1024x768
+            port: 9515
+            browser: chrome
+            capabilities:
+                "goog:chromeOptions": # additional chrome options
