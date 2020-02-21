@@ -9,9 +9,10 @@ class MainCest
     }
 
     // tests
-    public function checkElementsOnMainPage(AcceptanceTester $I, $loginPage)
+    public function checkMenuOnMainPage(AcceptanceTester $I, $loginPage)
     {
         $I->amOnPage(MainPage::$URL);
-        $I->waitForElementVisible(MainPage::)
+        $I->waitForElementVisible(MainPage::HEADER_LOGO);
+        $I->see(MainPage::MENU);
     }
 }

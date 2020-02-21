@@ -21,6 +21,7 @@ class MainPage
      * public static $formSubmitButton = "#mainForm input[type=submit]";
      */
     public const HEADER_LOGO = '#header_logo';
+    public const MENU = '.sf-menu';
     public const SIGN_IN = '.login';
     public const CONTACT = '#contact-link';
 
