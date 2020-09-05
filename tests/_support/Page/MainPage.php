@@ -94,12 +94,11 @@ class MainPage
     
     /**
      * searchFor
-     *
-     * @param  mixed $I
+     * 
      * @param  mixed $phrase
      * @return void
      */
-    public function searchFor(AcceptanceTester $I, string $phrase): void
+    public function searchFor(string $phrase): void
     {
         $this->I->click(self::INPUT_SEARCH);
         $this->I->fillField(self::INPUT_SEARCH, $phrase);
