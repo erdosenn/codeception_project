@@ -4,6 +4,7 @@
         "codeception/module-phpbrowser": "^1.0.0",
         "codeception/module-asserts": "^1.1",
         "codeception/module-webdriver": "^1.0",
-        "hoa/console": "^3.17"
+        "hoa/console": "^3.17",
+        "squizlabs/php_codesniffer": "^3.5"
     }
 }
