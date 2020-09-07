@@ -27,6 +27,8 @@ class LoginPage
     public const BTN_CREATE_ACCOUNT = '#SubmitCreate';
     public const BTN_SIGN_IN = '#SubmitLogin';
 
+    public const ERROR_BOX = '.alert-danger';
+
     /**
      * @var AcceptanceTester|mixed
      */
@@ -68,24 +70,6 @@ class LoginPage
     }
 
     /**
-     * @return void
-     * @throws Exception
-     */
-    public function hitCreateAccountBtn(): void
-    {
-        $this->tester->click(self::BTN_CREATE_ACCOUNT);
-        $this->tester->waitForElement(RegistrationPage::FORM);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function hitSignInBtn(): void
-    {
-        $this->tester->click(self::BTN_SIGN_IN);
-    }
-
-    /**
      * goToCreateAccount
      *
      * @param mixed $email
@@ -98,8 +82,46 @@ class LoginPage
         $this->tester->fillField(self::INPUT_REGISTRATION, $email);
         $this->tester->click(self::FORM_CREATE_ACCOUNT); //to check email
 
-        $this->hitCreateAccountBtn();
+        $this->tester->click(self::BTN_CREATE_ACCOUNT);
+        $this->tester->waitForElement(RegistrationPage::FORM);
 
         return new RegistrationPage($this->tester);
+    }
+
+    /**
+     * @param array $credentials
+     * @return void
+     * @throws Exception
+     */
+    public function fillEmailAndPasswordAndClickSignInBtn(array $credentials): void
+    {
+        $this->tester->waitForElement(self::INPUT_LOGIN);
+        $this->tester->fillField(self::INPUT_LOGIN, $credentials['email']);
+        $this->tester->fillField(self::INPUT_PASSWORD, $credentials['password']);
+
+        $this->tester->click(self::BTN_SIGN_IN);
+    }
+
+    /**
+     * @param array $credentials
+     * @return AccountPage
+     * @throws Exception
+     */
+    public function makeCorrectLogin(array $credentials): AccountPage
+    {
+        $this->fillEmailAndPasswordAndClickSignInBtn($credentials);
+        $this->tester->waitForElement(AccountPage::LIST_HISTORY);
+
+        return new AccountPage($this->tester);
+    }
+
+    /**
+     * @param array $credentials
+     * @throws Exception
+     */
+    public function makeIncorrectLogin(array $credentials): void
+    {
+        $this->fillEmailAndPasswordAndClickSignInBtn($credentials);
+        $this->tester->waitForElement(LoginPage::ERROR_BOX);
     }
 }
