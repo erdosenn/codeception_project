@@ -3,11 +3,12 @@
 namespace Page;
 
 use AcceptanceTester;
+use Exception;
 
 class MainPage
 {
     // include url of current page
-    public static $URL = 'http://automationpractice.com/index.php';
+    public static $URL = '';
 
     /**
      * @var AcceptanceTester
@@ -55,6 +56,15 @@ class MainPage
     }
 
     /**
+     * @throws Exception
+     */
+    public function amOnMainPage():void
+    {
+        $this->tester->amOnPage(self::$URL);
+        $this->tester->waitForElement(self::SLIDER);
+    }
+
+    /**
      * thisIsMainPage
      *
      * @return void
@@ -66,35 +76,15 @@ class MainPage
     }
 
     /**
-     * goToLoginPage
-     *
      * @return LoginPage
+     * @throws Exception
      */
     public function goToLoginPage(): LoginPage
     {
-        $this->tester->performOn(
-            self::SIGN_IN,
-            function (AcceptanceTester $I) {
-                $I->canSeeInCurrentUrl(LoginPage::$URL);
-            }
-        );
-        return new LoginPage($this->tester);
-    }
+        $this->tester->click(self::SIGN_IN);
+        $this->tester->waitForElement(LoginPage::FORM_CREATE_ACCOUNT);
 
-    /**
-     * goToContactPage
-     *
-     * @return RegistrationPage
-     */
-    public function goToContactPage(): RegistrationPage
-    {
-        $this->tester->performOn(
-            self::CONTACT,
-            function () {
-                $this->tester->canSeeInCurrentUrl(RegistrationPage::$URL);
-            }
-        );
-        return new RegistrationPage($this->tester);
+        return new LoginPage($this->tester);
     }
 
     /**
