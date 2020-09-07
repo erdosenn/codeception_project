@@ -1,7 +1,9 @@
 <?php
+
 namespace Page;
 
 use AcceptanceTester;
+use Exception;
 
 class LoginPage
 {
@@ -14,25 +16,90 @@ class LoginPage
      * public static $formSubmitButton = "#mainForm input[type=submit]";
      */
     public const NAVIGATION_PAGE = '.navigation_page';
-    private const CREATE_ACCOUNT = '#SubmitCreate';
 
-    private const INPUT_REGISTRATION = '#email_create';
+    public const FORM_CREATE_ACCOUNT = '#create-account_form';
+    public const FORM_LOGIN = '#login_form';
 
+    public const INPUT_REGISTRATION = '#email_create';
+    public const INPUT_LOGIN = '#email';
+    public const INPUT_PASSWORD = '#passwd';
+
+    public const BTN_CREATE_ACCOUNT = '#SubmitCreate';
+    public const BTN_SIGN_IN = '#SubmitLogin';
+
+    /**
+     * @var AcceptanceTester|mixed
+     */
+    private $tester;
 
     /**
      * Basic route example for your current URL
      * You can append any additional parameter to URL
      * and use it in tests like: Page\Edit::route('/123-post');
+     * @param $param
+     * @return string
      */
     public static function route($param)
     {
-        return static::$URL.$param;
+        return static::$URL . $param;
     }
 
-    public function createAccount(AcceptanceTester $I, string $email): void
+    /**
+     * __construct
+     *
+     * @param mixed $I
+     * @return void
+     */
+    public function __construct(AcceptanceTester $I)
     {
-        $I->fillField(self::INPUT_REGISTRATION, $email);
-        $I->click(self::CREATE_ACCOUNT);
-        $I->canSeeInCurrentUrl(RegistrationPage::$URL);
+        $this->tester = $I;
+    }
+
+    /**
+     * thisIsLoginPage
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function thisIsLoginPage(): void
+    {
+        $this->tester->waitForElement(self::FORM_CREATE_ACCOUNT);
+        $this->tester->seeCurrentUrlEquals(self::$URL);
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function hitCreateAccountBtn(): void
+    {
+        $this->tester->click(self::BTN_CREATE_ACCOUNT);
+        $this->tester->waitForElement(RegistrationPage::FORM);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function hitSignInBtn(): void
+    {
+        $this->tester->click(self::BTN_SIGN_IN);
+    }
+
+    /**
+     * goToCreateAccount
+     *
+     * @param mixed $email
+     * @return RegistrationPage
+     * @throws Exception
+     */
+    public function fillEmailAddressAndClickCreateAccountBtn(string $email): RegistrationPage
+    {
+        $this->tester->waitForElement(self::INPUT_REGISTRATION);
+        $this->tester->fillField(self::INPUT_REGISTRATION, $email);
+        $this->tester->click(self::FORM_CREATE_ACCOUNT); //to check email
+
+        $this->hitCreateAccountBtn();
+
+        return new RegistrationPage($this->tester);
     }
 }

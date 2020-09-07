@@ -3,15 +3,15 @@
 namespace Page;
 
 use AcceptanceTester;
-use Page\LoginPage;
+use Exception;
 
 class MainPage
 {
     // include url of current page
-    public static $URL = 'http://automationpractice.com/index.php';
-    
+    public static $URL = '';
+
     /**
-     * @var AcceptanceTester 
+     * @var AcceptanceTester
      */
     protected $tester;
 
@@ -25,7 +25,7 @@ class MainPage
     public const SIGN_IN = '.login';
     public const CONTACT = '#contact-link';
     public const SLIDER = '#homepage-slider';
-    
+
     public const INPUT_SEARCH = '#search_query_top';
     public const INPUT_NEWSLETTER = '#newsletter-input';
 
@@ -36,25 +36,28 @@ class MainPage
      * Basic route example for your current URL
      * You can append any additional parameter to URL
      * and use it in tests like: Page\Edit::route('/123-post');
-     * @param  mixed $param
-     * @return void
+     * @param mixed $param
+     * @return string
      */
     public static function route($param)
     {
         return static::$URL . $param;
     }
-    
+
     /**
      * __construct
      *
-     * @param  mixed $I
+     * @param mixed $I
      * @return void
+     * @throws Exception
      */
     public function __construct(AcceptanceTester $I)
     {
-       $this->tester = $I;
+        $this->tester = $I;
+        $this->tester->amOnPage(self::$URL);
+        $this->tester->waitForElement(self::SLIDER);
     }
-    
+
     /**
      * thisIsMainPage
      *
@@ -62,46 +65,32 @@ class MainPage
      */
     public function thisIsMainPage(): void
     {
-        $this->I->waitForElementPresent(self::SLIDER);
-        $this->I->seeCurrentUrlEquals(self::$URL);
+        $this->tester->waitForElementPresent(self::SLIDER);
+        $this->tester->seeCurrentUrlEquals(self::$URL);
     }
 
     /**
-     * goToLoginPage
-     *
      * @return LoginPage
+     * @throws Exception
      */
     public function goToLoginPage(): LoginPage
-    {        
-        $this->I->performOn(self::SIGN_IN, function (AcceptanceTester $I) {
-            $I->canSeeInCurrentUrl(LoginPage::$URL);
-        });
+    {
+        $this->tester->click(self::SIGN_IN);
+        $this->tester->waitForElement(LoginPage::INPUT_REGISTRATION);
+
         return new LoginPage($this->tester);
     }
-    
-    /**
-     * goToContactPage
-     *
-     * @return RegistrationPage
-     */
-    public function goToContactPage(): RegistrationPage
-    {
-        $this->I->performOn(self::CONTACT, function (AcceptanceTester $I) {
-            $I->canSeeInCurrentUrl(RegistrationPage::$URL);
-        });
-        return new RegistrationPage($this->tester);
-    }
-    
+
     /**
      * searchFor
-     * 
-     * @param  mixed $phrase
+     *
+     * @param mixed $phrase
      * @return void
      */
     public function searchFor(string $phrase): void
     {
-        $this->I->click(self::INPUT_SEARCH);
-        $this->I->fillField(self::INPUT_SEARCH, $phrase);
-        $this->I->click(self::BUTTON_SEARCH);
+        $this->tester->click(self::INPUT_SEARCH);
+        $this->tester->fillField(self::INPUT_SEARCH, $phrase);
+        $this->tester->click(self::BUTTON_SEARCH);
     }
 }
