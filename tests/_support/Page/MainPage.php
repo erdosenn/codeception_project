@@ -49,17 +49,11 @@ class MainPage
      *
      * @param mixed $I
      * @return void
+     * @throws Exception
      */
     public function __construct(AcceptanceTester $I)
     {
         $this->tester = $I;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function amOnMainPage():void
-    {
         $this->tester->amOnPage(self::$URL);
         $this->tester->waitForElement(self::SLIDER);
     }
@@ -82,7 +76,7 @@ class MainPage
     public function goToLoginPage(): LoginPage
     {
         $this->tester->click(self::SIGN_IN);
-        $this->tester->waitForElement(LoginPage::FORM_CREATE_ACCOUNT);
+        $this->tester->waitForElement(LoginPage::INPUT_REGISTRATION);
 
         return new LoginPage($this->tester);
     }

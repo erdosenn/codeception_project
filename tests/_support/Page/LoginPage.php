@@ -17,7 +17,7 @@ class LoginPage
      */
     public const NAVIGATION_PAGE = '.navigation_page';
 
-    public const FORM_CREATE_ACCOUNT = '#create_account_form';
+    public const FORM_CREATE_ACCOUNT = '#create-account_form';
     public const FORM_LOGIN = '#login_form';
 
     public const INPUT_REGISTRATION = '#email_create';
@@ -25,7 +25,8 @@ class LoginPage
     public const INPUT_PASSWORD = '#passwd';
 
     public const BTN_CREATE_ACCOUNT = '#SubmitCreate';
-    public const BTN_SIGN_IN = '#SubmitCreate';
+    public const BTN_SIGN_IN = '#SubmitLogin';
+
     /**
      * @var AcceptanceTester|mixed
      */
@@ -67,6 +68,24 @@ class LoginPage
     }
 
     /**
+     * @return void
+     * @throws Exception
+     */
+    public function hitCreateAccountBtn(): void
+    {
+        $this->tester->click(self::BTN_CREATE_ACCOUNT);
+        $this->tester->waitForElement(RegistrationPage::FORM);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function hitSignInBtn(): void
+    {
+        $this->tester->click(self::BTN_SIGN_IN);
+    }
+
+    /**
      * goToCreateAccount
      *
      * @param mixed $email
@@ -75,9 +94,12 @@ class LoginPage
      */
     public function fillEmailAddressAndClickCreateAccountBtn(string $email): RegistrationPage
     {
+        $this->tester->waitForElement(self::INPUT_REGISTRATION);
         $this->tester->fillField(self::INPUT_REGISTRATION, $email);
-        $this->tester->click(self::FORM_CREATE_ACCOUNT);
-        $this->tester->waitForElement(RegistrationPage::FORM);
+        $this->tester->click(self::FORM_CREATE_ACCOUNT); //to check email
+
+        $this->hitCreateAccountBtn();
+
         return new RegistrationPage($this->tester);
     }
 }
