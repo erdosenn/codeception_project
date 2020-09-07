@@ -8,7 +8,6 @@ use Faker\Factory;
 use Mapper\Errors;
 use Page\AccountPage;
 use Page\MainPage;
-use Page\RegistrationPage;
 use Page\RegistrationPage as Reg;
 
 class RegistrationCest
@@ -66,7 +65,7 @@ class RegistrationCest
     public function makeRegistrationWithoutRequiredFields(AcceptanceTester $I): void
     {
         $I->amGoingTo('Check required fields');
-        $I->click(RegistrationPage::BTN_REGISTER);
+        $I->click(Reg::BTN_REGISTER);
 
         $I->expect('Errors about missing data in required field');
         $I->waitForElement(Reg::ERROR_BOX);

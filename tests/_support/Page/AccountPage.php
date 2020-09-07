@@ -21,7 +21,10 @@ class AccountPage
 
     public const PAGE_HEADING = '.page-heading';
 
-    public const LIST_HISTORY = ['title' => 'Orders'];
+    public const LIST_HISTORY = '//*[@title="Orders"]';
+
+    public const BTN_ACCOUNT = '.account';
+    public const BTN_SIGN_OUT = '.logout';
 
     /**
      * Basic route example for your current URL
@@ -55,5 +58,14 @@ class AccountPage
         $this->tester->seeInCurrentUrl(self::$URL);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function logoutFromAccount(): LoginPage
+    {
+        $this->tester->click(self::BTN_SIGN_OUT);
+        $this->tester->waitForElement(LoginPage::INPUT_LOGIN);
+        return new LoginPage($this->tester);
+    }
 
 }
