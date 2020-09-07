@@ -12,7 +12,6 @@ modules:
         WebDriver:
             url: 'http://automationpractice.com/index.php'
             port: 9515
-            window_size: 'maximize'
             browser: chrome
             capabilities:
                 javascriptEnabled: true
