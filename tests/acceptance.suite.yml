@@ -11,11 +11,11 @@ modules:
     config:
         WebDriver:
             url: 'http://automationpractice.com/index.php'
-            window_size: 1024x768
-    #         port: 9515
+            port: 9515
+            window_size: 'maximize'
             browser: chrome
-    #         capabilities:
-    #             "goog:chromeOptions": # additional chrome options
+            capabilities:
+                javascriptEnabled: true
 extensions:
     enabled:
         - \Codeception\Extension\RunProcess:
